@@ -1,0 +1,50 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+includes:
+  init:
+    taskfile: init.yaml
+
+vars:
+  PKG_MANAGER:
+    sh: |
+      if [ -x "$(command -v apt)" ]; then
+        echo "apt"
+      elif [ -x "$(command -v yum)" ]; then
+        echo "yum"
+      elif [ -x "$(command -v dnf)" ]; then
+        echo "dnf"
+      elif [ -x "$(command -v pacman)" ]; then
+        echo "pacman"
+      fi
+    platform: linux
+  FIRA_CODE_PKG:
+    sh: |
+      if [ -x "$(command -v apt)" ]; then
+        echo "install -y fonts-firacode"
+      elif [ -x "$(command -v yum)" ]; then
+        echo "install -y fira-code-fonts"
+      elif [ -x "$(command -v dnf)" ]; then
+        echo "install -y fira-code-fonts"
+      elif [ -x "$(command -v pacman)" ]; then
+        echo "-S --no-confirm ttf-fira-code"
+      fi
+    platform: linux
+tasks:
+  default:
+    silent: true
+    cmds:
+      - "task --list"
+
+  fira-code:
+    desc: "Install Fira Code"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing Fira Code"
+      - cmd: test -d ~/Library/Fonts/FiraCodeNerdFont || brew install --cask font-fira-code-nerd-font
+        platforms:
+          - darwin
+      - cmd: test -d ~/.local/share/fonts/FiraCodeNerdFont || sudo {{.PKG_MANAGER}} {{.FIRA_CODE_PKG}}
+        platforms:
+          - linux

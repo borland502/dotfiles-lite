@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+includes:
+  tools:
+    taskfile: taskfiles/cli-tools.yaml
+
+  fonts:
+    taskfile: taskfiles/fonts.yaml

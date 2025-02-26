@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+includes:
+  init:
+    taskfile: init.yaml
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - "task --list"
+
+  bat:
+    silent: true
+    desc: "Install bat"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing bat"
+      - test $(command -v bat) || brew install bat
+
+  eza:
+    silent: true
+    desc: "Install eza"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing eza"
+      - test $(command -v eza) || brew install eza
+
+  fd:
+    silent: true
+    desc: "Install fd"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing fd"
+      - test $(command -v fd) || brew install fd
+
+  fzf:
+    silent: true
+    desc: "Install fzf"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing fzf"
+      - test $(command -v fzf) || brew install fzf
+
+  ncdu:
+    silent: true
+    desc: "Install ncdu"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing ncdu"
+      - test $(command -v ncdu) || brew install ncdu
+
+  nmap:
+    silent: true
+    desc: "Install nmap"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing nmap"
+      - test $(command -v nmap) || brew install nmap
+
+  ripgrep:
+    silent: true
+    desc: "Install ripgrep"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing ripgrep"
+      - test $(command -v rg) || brew install ripgrep
+
+  sd:
+    silent: true
+    desc: "Install sd"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing sd"
+      - test $(command -v sd) || brew install sd
+
+  shell:
+    silent: true
+    desc: "Install sensible defaults for $SHELL"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} All dependencies installed"
+      - "{{.INFO}} Installing sensible defaults for $SHELL"
+      - |
+        if [ -f "$HOME/.bashrc" ]; then mv "$HOME/.bashrc" "/tmp/.bashrc.$(date +%s)"; fi &&
+        if [ -f "$HOME/.zshrc" ]; then mv "$HOME/.zshrc" "/tmp/.zshrc.$(date +%s)"; fi &&
+        cp config/bash/.bashrc "$HOME/.bashrc" &&
+        cp config/zsh/.zshrc "$HOME/.zshrc"
+
+  starship:
+    silent: true
+    desc: "Install starship"
+    deps:
+      - task: init:init
+    status:
+      - test $(command -v starship)
+    cmds:
+      - "{{.INFO}} Installing starship"
+      - test $(command -v starship) || brew install starship
+      - echo 'eval "$(starship init bash)"' >> "$HOME/.bashrc"
+      - echo 'eval "$(starship init zsh)"' >> "$HOME/.zshrc"
+
+  vim:
+    silent: true
+    desc: "Install vim"
+    deps:
+      - task: init:init
+    cmds:
+      - "{{.INFO}} Installing vim"
+      - test $(command -v vim) || brew install vim
