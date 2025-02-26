@@ -70,3 +70,13 @@ bindkey '\e[3~' delete-char
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 bindkey ' '  magic-space
+
+# Augment path for linuxbrew/homebrew
+PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
+
+# shell modules
+## use gomplate to include snippets particular to tools
+{{ if (exists "starship") }}
+eval "$(starship init zsh)"
+export STARSHIP_CONFIG="{{ .Env.HOME }}/.config/starship/starship.toml"
+{{ end }}

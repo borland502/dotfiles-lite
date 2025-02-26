@@ -6,22 +6,22 @@
 source "lib/colors.sh"
 
 function info() {
-  gum log --level=info --time=short --format=false \
+  gum log --level=info --time=RFC850 --format=false \
     --level.foreground="$INFO_COLOR" "$*"
 }
 
 function debug() {
-  gum log --level debug --time short --format=true \
+  gum log --level debug --time=RFC850 --format=true \
     --level.foreground "$DEBUG_COLOR" "$*"
 }
 
 function warn() {
-  gum log --level warn --time short --format=true \
+  gum log --level warn --time=RFC850 --format=true \
     --level.foreground "$WARN_COLOR" "$*"
 }
 
 function error() {
-  gum log --level error --time short --format=true \
+  gum log --level error --time=RFC850 --format=true \
     --level.foreground "$ERROR_COLOR" "$*"
 }
 

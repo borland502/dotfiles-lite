@@ -1,9 +1,75 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
+dotenv:
+  - .env
+  - .env.local
+
+vars:
+  INFO: "source lib/logging.sh; info"
+  ERROR: "source lib/logging.sh; error"
+  WARN: "source lib/logging.sh; warn"
+  DEBUG: "source lib/logging.sh; debug"
+
 includes:
   tools:
     taskfile: taskfiles/cli-tools.yaml
 
-  fonts:
-    taskfile: taskfiles/fonts.yaml
+tasks:
+  
+  init:deps:
+    internal: true
+    silent: true
+    status:
+      - test $(command -v gum) || brew install gum
+      - test $(command -v gomplate) || brew install gomplate
+      - test $(command -v git) || brew install git
+      - test $(command -v gh) || brew install gh
+      - test $(command -v dasel) || brew install dasel
+      - test $(command -v jq) || brew install jq
+    cmds:
+      - "{{.INFO}} All dependencies installed"
+
+  init:shell:config:
+    internal: true
+    silent: true
+    status:
+      - test "$(sha256sum $HOME/.zshrc | cut -d ' ' -f1)" == "$(sha256sum config/zsh/.zshrc | cut -d ' ' -f1)"
+      - test "$(sha256sum $HOME/.bashrc | cut -d ' ' -f1)" == "$(sha256sum config/bash/.bashrc | cut -d ' ' -f1)"
+    cmds:
+      - "{{.INFO}} Installing sensible defaults for $SHELL"
+      - |
+        if [ -f "$HOME/.bashrc" ]; then mv "$HOME/.bashrc" "/tmp/.bashrc.$(date +%s)"; fi &&
+        if [ -f "$HOME/.zshrc" ]; then mv "$HOME/.zshrc" "/tmp/.zshrc.$(date +%s)"; fi &&
+        gomplate -f config/bash/.bashrc -o "$HOME/.bashrc" &&
+        gomplate -f config/zsh/.zshrc -o "$HOME/.zshrc" 
+      - |
+        echo >> /home/vscode/.bashrc
+        if [ "$(uname)" = "Darwin" ]; then
+          BREW_PREFIX="/opt/homebrew"
+        else
+          BREW_PREFIX="/home/linuxbrew/.linuxbrew"
+        fi
+        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> /home/vscode/.bashrc
+        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> /home/vscode/.bashrc
+        eval "$($BREW_PREFIX/bin/brew shellenv)"
+
+        echo >> /home/vscode/.zshrc
+        if [ "$(uname)" = "Darwin" ]; then
+          BREW_PREFIX="/opt/homebrew"
+        else
+          BREW_PREFIX="/home/linuxbrew/.linuxbrew"
+        fi
+        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> /home/vscode/.bashrc
+        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> /home/vscode/.bashrc
+        eval "$($BREW_PREFIX/bin/brew shellenv)" 
+
+  install:all:
+    desc: Install all tools, fonts, and dependencies after resetting the rc files
+    deps:
+      - init:deps
+    cmds:
+      - task: tools:install
+      - task: init:shell:config
+      - |
+        {{.WARN}} "Please restart your terminal to apply the changes to your shell"
