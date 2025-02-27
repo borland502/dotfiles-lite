@@ -28,24 +28,11 @@ tasks:
     cmds:
       - "{{.INFO}} All dependencies installed"
 
-  init:shell:config:
-    silent: true
-    status:
-      - test "$(sha256sum $HOME/.zshrc | cut -d ' ' -f1)" == "$(sha256sum config/zsh/.zshrc | cut -d ' ' -f1)"
-      - test "$(sha256sum $HOME/.bashrc | cut -d ' ' -f1)" == "$(sha256sum config/bash/.bashrc | cut -d ' ' -f1)"
-    cmds:
-      - "{{.INFO}} Installing sensible defaults for $SHELL"
-      - |
-        if [ -f "$HOME/.zshrc" ]; then mv "$HOME/.zshrc" "/tmp/.zshrc.$(date +%s)"; fi &&
-        touch "$HOME/.zshrc" &&
-        gomplate -f config/zsh/.zshrc -o "$HOME/.zshrc"
-
   install:all:
     desc: Install all tools, fonts, and dependencies after resetting the rc files
     deps:
       - init:deps
     cmds:
       - task: tools:install
-      - task: init:shell:config
       - |
         {{.WARN}} "Please restart your terminal to apply the changes to your shell"

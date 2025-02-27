@@ -3,6 +3,10 @@
 PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
 
 # Install the dependencies
+
+# hard link the .zshrc file
+ln -f "config/zsh/.zshrc" "$HOME/.zshrc"
+
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then
   echo "Installing Homebrew"
@@ -14,15 +18,6 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 elif [[ "$OSTYPE" == "linux"* ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
-
-if [ "$(uname)" = "Darwin" ]; then
-  BREW_PREFIX="/opt/homebrew"
-else
-  BREW_PREFIX="/home/linuxbrew/.linuxbrew"
-fi
-echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> $HOME/.zshrc
-echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> $HOME/.zshrc
-eval "$($BREW_PREFIX/bin/brew shellenv)"
 
 test "$(command -v brew)" || exit 2
 
@@ -39,13 +34,6 @@ if [[ "${SHELL}" != *"zsh" ]]; then
   echo "export SHELL=$(which zsh)" > $HOME/.zshenv
   exec zsh -- "$0" "$@"
 fi
-
-## Znap - https://github.com/marlonrichert/zsh-snap
-# Download Znap, if it's not there yet.
-[[ -r ~/Development/github/znap/znap.zsh ]] ||
-    git clone --depth 1 -- \
-        https://github.com/marlonrichert/zsh-snap.git ~/Development/github/znap
-source ~/Development/github/znap/znap.zsh  # Start Znap
 
 ## Gum
 if ! [[ $(command -v gum) ]]; then
@@ -64,6 +52,7 @@ fi
 test "$(command -v gomplate)" || exit 2
 
 gomplate -f config/.env.tmpl -o .env
+cp -Ral ./config/zsh/.zshrc.d/ ~/.zshrc.d/ 2> /dev/null
 
 if ! [[ $(command -v task) ]]; then
   echo "Installing Taskfiles.dev"
