@@ -16,9 +16,7 @@ includes:
     taskfile: taskfiles/cli-tools.yaml
 
 tasks:
-  
   init:deps:
-    internal: true
     silent: true
     status:
       - test $(command -v gum) || brew install gum
@@ -31,7 +29,6 @@ tasks:
       - "{{.INFO}} All dependencies installed"
 
   init:shell:config:
-    internal: true
     silent: true
     status:
       - test "$(sha256sum $HOME/.zshrc | cut -d ' ' -f1)" == "$(sha256sum config/zsh/.zshrc | cut -d ' ' -f1)"
@@ -41,28 +38,30 @@ tasks:
       - |
         if [ -f "$HOME/.bashrc" ]; then mv "$HOME/.bashrc" "/tmp/.bashrc.$(date +%s)"; fi &&
         if [ -f "$HOME/.zshrc" ]; then mv "$HOME/.zshrc" "/tmp/.zshrc.$(date +%s)"; fi &&
+        touch "$HOME/.bashrc" &&
+        touch "$HOME/.zshrc" &&
         gomplate -f config/bash/.bashrc -o "$HOME/.bashrc" &&
-        gomplate -f config/zsh/.zshrc -o "$HOME/.zshrc" 
+        gomplate -f config/zsh/.zshrc -o "$HOME/.zshrc"
       - |
-        echo >> /home/vscode/.bashrc
+        echo >> $HOME/.bashrc
         if [ "$(uname)" = "Darwin" ]; then
           BREW_PREFIX="/opt/homebrew"
         else
           BREW_PREFIX="/home/linuxbrew/.linuxbrew"
         fi
-        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> /home/vscode/.bashrc
-        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> /home/vscode/.bashrc
+        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> $HOME/.bashrc
+        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> $HOME/.bashrc
         eval "$($BREW_PREFIX/bin/brew shellenv)"
 
-        echo >> /home/vscode/.zshrc
+        echo >> $HOME/.zshrc
         if [ "$(uname)" = "Darwin" ]; then
           BREW_PREFIX="/opt/homebrew"
         else
           BREW_PREFIX="/home/linuxbrew/.linuxbrew"
         fi
-        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> /home/vscode/.bashrc
-        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> /home/vscode/.bashrc
-        eval "$($BREW_PREFIX/bin/brew shellenv)" 
+        echo "export PATH=\"$BREW_PREFIX/bin:\$PATH\"" >> $HOME/.bashrc
+        echo "eval \"\$($BREW_PREFIX/bin/brew shellenv)\"" >> $HOME/.bashrc
+        eval "$($BREW_PREFIX/bin/brew shellenv)"
 
   install:all:
     desc: Install all tools, fonts, and dependencies after resetting the rc files

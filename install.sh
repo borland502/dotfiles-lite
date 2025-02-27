@@ -8,7 +8,12 @@ if ! [[ $(command -v brew) ]]; then
   bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ "$OSTYPE" == "linux"* ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
+
 test "$(command -v brew)" || exit 2
 
 if ! [[ $(command -v gum) ]]; then
@@ -24,6 +29,8 @@ if ! [[ $(command -v gomplate) ]]; then
 fi
 
 test "$(command -v gomplate)" || exit 2
+
+gomplate -f config/.env.tmpl -o .env
 
 if ! [[ $(command -v task) ]]; then
   echo "Installing Taskfiles.dev"

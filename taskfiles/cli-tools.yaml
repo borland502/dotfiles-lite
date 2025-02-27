@@ -18,7 +18,7 @@ tasks:
     silent: true
     desc: "Install bat"
     status:
-      - test $(command -v bat)      
+      - test $(command -v bat)
     cmds:
       - "{{.INFO}} Installing bat"
       - brew install bat
@@ -76,6 +76,19 @@ tasks:
     cmds:
       - "{{.INFO}} Installing nmap"
       - brew install nmap
+
+  nvm:
+    silent: true
+    desc: "Install nvm"
+    requires:
+      vars:
+        - NVM_DIR
+    status:
+      - test $(command -v nvm)
+    cmds:
+      - "{{.INFO}} Installing nvm"
+      - brew install nvm
+      - source ${HOME}/.nvm/nvm.sh; nvm install --lts
 
   ripgrep:
     silent: true
