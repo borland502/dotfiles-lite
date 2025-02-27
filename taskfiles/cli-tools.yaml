@@ -1,6 +1,16 @@
 # yaml-language-server: $schema=https://taskfile.dev/schema.json
 version: "3"
 
+vars:
+  INFO: "source lib/logging.sh; info"
+  ERROR: "source lib/logging.sh; error"
+  WARN: "source lib/logging.sh; warn"
+  DEBUG: "source lib/logging.sh; debug"
+
+env:
+  NVM_DIR: "{{.HOME}}/.nvm"
+  ZNAP_PREFIX: "source {{.HOME}}/Development/github/znap/znap.zsh; znap" 
+
 tasks:
   default:
     silent: true
@@ -77,18 +87,24 @@ tasks:
       - "{{.INFO}} Installing nmap"
       - brew install nmap
 
-  nvm:
-    silent: true
-    desc: "Install nvm"
-    requires:
-      vars:
-        - NVM_DIR
-    status:
-      - test $(command -v nvm)
-    cmds:
-      - "{{.INFO}} Installing nvm"
-      - brew install nvm
-      - source ${HOME}/.nvm/nvm.sh; nvm install --lts
+  # nvm:
+  #   silent: true
+  #   desc: "Install nvm"
+  #   requires:
+  #     vars:
+  #       - NVM_DIR
+  #   cmds:
+  #     - "{{.INFO}} Installing nvm"
+  #     - |
+  #       echo > $HOME/.zshrc.d/00-nvm.zsh
+  #       echo "export NVM_DIR=\"$NVM_DIR\"" >> $HOME/.zshrc.d/00-nvm.zsh
+  #       echo "[ -s \"$(brew --prefix)/opt/nvm/nvm.sh\" ] && . \"$(brew --prefix)/opt/nvm/nvm.sh\"" >> $HOME/.zshrc.d/00-nvm.zsh
+  #       echo "[ -s \"$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm\" ] && . \"$(brew --prefix)/opt/nvm/etc/bash_completion.d/nvm\"" >> $HOME/.zshrc.d/00-nvm.zsh      
+  #     - mkdir -p {{.NVM_DIR}}
+  #     - brew install nvm
+  #     - |
+  #       . $(brew --prefix)/opt/nvm/nvm.sh
+  #       nvm install --lts
 
   ripgrep:
     silent: true
@@ -108,17 +124,18 @@ tasks:
       - "{{.INFO}} Installing sd"
       - brew install sd
 
-  starship:
-    silent: true
-    desc: "Install starship"
-    status:
-      - test $(command -v starship)
-    cmds:
-      - "{{.INFO}} Installing starship"
-      - brew install starship
-      - "{{.INFO}} Configuring starship"
-      - mkdir -p ~/.config/starship
-      - gomplate -f config/starship/starship.toml -o ~/.config/starship/starship.toml
+  # starship:
+  #   silent: true
+  #   desc: "Install starship"
+  #   status:
+  #     - test $(command -v starship)
+  #   cmds:
+  #     - "{{.INFO}} Installing starship"
+  #     - brew install starship
+  #     - "{{.INFO}} Configuring starship"
+  #     - mkdir -p ~/.config/starship
+  #     - gomplate -f config/starship/starship.toml -o ~/.config/starship/starship.toml
+  #     - "{{.ZSNAP_PREFIX}} install starship/starship
 
   vim:
     silent: true

@@ -3,6 +3,12 @@
 # Gist page: git.io/vSBRk  
 # Raw file:  curl -L git.io/sensible-zshrc
 
+# Znap works a bit better than zinit for lego assembly reasons
+[[ -r ~/Development/github/znap/znap.zsh ]] ||
+    git clone --depth 1 -- \
+        https://github.com/marlonrichert/zsh-snap.git ~/Repos/znap
+source ~/Development/github/znap/znap.zsh  # Start Znap
+
 # GNU and BSD (macOS) ls flags aren't compatible
 ls --version &>/dev/null
 if [ $? -eq 0 ]; then
@@ -72,17 +78,22 @@ bindkey '^n' history-search-forward
 bindkey ' '  magic-space
 
 # Augment path for linuxbrew/homebrew
-PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
+PATH={{.Env.HOME}}/.local/bin:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/homebrew/bin:/opt/homebrew/sbin:{{.Env.HOME}}/Repos/znap/functions:{{.Env.PATH}}
 
-# shell modules
-## use gomplate to include snippets particular to tools
+# Plugins
+mkdir -p ~/.zshrc.d
+znap source mattmc3/zshrc.d
+znap source lukechilds/zsh-nvm
+znap source "wintermi/zsh-starship"
+znap source "z-shell/zsh-eza"
 
-if [[ $(command -v starship )]]; then
-  eval "$(starship init zsh)"
-fi
 
-{{- if (file.IsDir (filepath.Join .Env.HOME "/.nvm")) }}
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-{{- end }}
+# if [[ $(command -v starship ) ]]; then
+#   eval "$(starship init zsh)"
+# fi
+
+# {{- if (file.IsDir (filepath.Join .Env.HOME "/.nvm")) }}
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# {{- end }}
