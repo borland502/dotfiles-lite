@@ -1,56 +1,172 @@
-# Monokai Pro inspired Starship configuration
+# Monokai Pro Filter Spectrum inspired Starship configuration
 
 format = """
-[░▒▓](#fc618d)\
+$os\
+$username\
+$hostname\
 $directory\
 $git_branch\
+$git_commit\
+$git_state\
 $git_status\
+$docker_context\
+$package\
 $nodejs\
 $rust\
 $python\
+$golang\
+$php\
+$java\
+$kotlin\
+$haskell\
 $cmd_duration\
 $line_break\
+$time\
 $character"""
 
 # Core
 [character]
-success_symbol = "[❯](#a9dc76)"
-error_symbol = "[❯](#ff6188)"
+  error_symbol = "[](#ff6188)"
+  success_symbol = "[](#a9dc76)"
 
 [directory]
-style = "fg:#ffd866"
-read_only = " "
-truncation_length = 4
-truncate_to_repo = true
+  read_only = " 󰌾"
+  style = "fg:#ffd866"
+  truncate_to_repo = true
+  truncation_length = 4
+
+[username]
+  format = "[$user]($style) "
+  show_always = false
+  style_root = "fg:#ff6188"
+  style_user = "fg:#78dce8"
+
+[hostname]
+  format = "[@$hostname]($style) "
+  ssh_symbol = " "
+  style = "fg:#ab9df2"
 
 # Git
 [git_branch]
-symbol = " "
-style = "fg:#ab9df2"
-format = "[$symbol$branch]($style) "
+  format = "[$symbol$branch]($style) "
+  style = "fg:#ab9df2"
+  symbol = " "
 
 [git_status]
-style = "fg:#fc618d"
-format = '([\[$all_status$ahead_behind\]]($style) )'
+  format = '([\[$all_status$ahead_behind\]]($style) )'
+  style = "fg:#fc618d"
 
-# Languages
-[nodejs]
-symbol = " "
-style = "fg:#a9dc76"
-format = "[$symbol($version )]($style)"
+[git_state]
+  style = "fg:#ffd866"
 
-[rust]
-symbol = " "
-style = "fg:#fc618d"
-format = "[$symbol($version )]($style)"
+[git_commit]
+  style = "fg:#78dce8"
+  tag_symbol = '  '
 
-[python]
-symbol = " "
-style = "fg:#ffd866"
-format = "[$symbol($version )]($style)"
+# Tools
+[package]
+  format = "[$symbol$version]($style) "
+  style = "fg:#ffd866"
+  symbol = "󰏗 "
+
+[docker_context]
+  format = "[$symbol$container]($style) "
+  style = "fg:#78dce8"
+  symbol = " "
 
 # Utils
 [cmd_duration]
-style = "fg:#78dce8"
-format = "[$duration]($style) "
-min_time = 500
+  format = "[$duration]($style) "
+  min_time = 500
+  style = "fg:#78dce8"
+
+[direnv]
+  format = "[$symbol$env]($style) "
+  style = "fg:#ffd866"
+  symbol = " "
+
+[os]
+  disabled = false
+  style = "fg:#fc618d"
+
+[os.symbols]
+  AlmaLinux = " "   # nf-linux-almalinux
+  Alpine = " "      # nf-linux-alpine
+  Android = " "     # nf-linux-android
+  Arch = " "        # nf-linux-arch
+  CentOS = " "      # nf-linux-centos
+  Debian = " "      # nf-linux-debian  
+  EndeavourOS = " " # nf-linux-endeavouros
+  Fedora = " "      # nf-linux-fedora
+  FreeBSD = " "     # nf-linux-freebsd
+  Kali = " "        # nf-linux-kali
+  Linux = " "       # nf-linux-linux
+  Macos = " "       # nf-linux-macos
+  Manjaro = " "     # nf-linux-manjaro
+  Mint = "󰣭 "        # nf-linux-mint
+  NixOS = "󱄅 "       # nf-linux-nixos
+  OpenBSD = " "     # nf-linux-openbsd
+  Pop = " "         # nf-linux-pop
+  Raspbian = " "    # nf-linux-raspbian
+  Ubuntu = " "      # nf-linux-ubuntu
+  Unknown = " "     # nf-linux-unknown
+  Windows = " "
+
+[time]
+  disabled = false
+  format = ' [$time]($style) '
+  style = "fg:#78dce8"
+  time_format = "%H:%M"
+
+# Languages with symbols
+[nodejs]
+  style = "fg:#78dce8"
+  symbol = ""
+
+[rust]
+  style = "fg:#fc618d"
+  symbol = "󱘗"
+
+[python]
+  style = "fg:#ffd866"
+  symbol = ""
+
+[golang]
+  style = "fg:#78dce8"
+  symbol = ""
+
+[php]
+  style = "fg:#ab9df2"
+  symbol = ""
+
+[java]
+  style = "fg:#fc618d"
+  symbol = ""
+
+[kotlin]
+  style = "fg:#a9dc76"
+  symbol = ""
+
+[haskell]
+  style = "fg:#ff6188"
+  symbol = "λ"
+
+[gradle]
+  style = "fg:#ffd866"
+  symbol = ""
+
+[elixir]
+  style = "fg:#fc618d"
+  symbol = ""
+
+[ruby]
+  style = "fg:#a9dc76"
+  symbol = ""
+
+[c]
+  style = "fg:#78dce8"
+  symbol = ""
+
+[swift]
+  style = "fg:#ffd866"
+  symbol = ""

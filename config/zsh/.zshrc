@@ -15,5 +15,7 @@ source $HOME/.zshrc.d/04-exports.zsh
 source $HOME/.zshrc.d/05-plugins.zsh
 
 # These may or may not be present
+znap eval zoxide "zoxide init zsh" 2> /dev/null
 znap eval starship "starship init zsh" 2> /dev/null
 znap eval atuin "atuin init zsh" 2> /dev/null
+znap eval fzf "fzf --zsh" 2> /dev/null

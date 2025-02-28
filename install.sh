@@ -4,7 +4,7 @@ PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
 
 # Install the dependencies
 
-cp -u "config/zsh/.zshrc" "$HOME/.zshrc"
+rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
 
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then
@@ -51,7 +51,7 @@ fi
 test "$(command -v gomplate)" || exit 2
 
 gomplate -f config/.env.tmpl -o .env
-cp -Ru ./config/zsh/.zshrc.d/* ~/.zshrc.d/
+rsync -u ./config/zsh/.zshrc.d/* ~/.zshrc.d/
 
 if ! [[ $(command -v task) ]]; then
   echo "Installing Taskfiles.dev"
