@@ -1,2 +1,4 @@
 znap source zsh-users/zsh-autosuggestions
-znap source zsh-users/zsh-syntax-highlighting
+znap source clarketm/zsh-completions
+znap source zdharma/fast-syntax-highlighting
+znap source targendaz2/taskfile
