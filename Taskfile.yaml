@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+dotenv:
+  - .env
+  - .env.local
+
+vars:
+  INFO: "source lib/logging.sh; info"
+  ERROR: "source lib/logging.sh; error"
+  WARN: "source lib/logging.sh; warn"
+  DEBUG: "source lib/logging.sh; debug"
+
+includes:
+  tools:
+    taskfile: taskfiles/cli-tools.yaml
+
+tasks:
+  init:deps:
+    silent: true
+    status:
+      - test $(command -v gum) || brew install gum
+      - test $(command -v gomplate) || brew install gomplate
+      - test $(command -v git) || brew install git
+      - test $(command -v gh) || brew install gh
+      - test $(command -v dasel) || brew install dasel
+      - test $(command -v jq) || brew install jq
+    cmds:
+      - "{{.INFO}} All dependencies installed"
+
+  install:all:
+    desc: Install all tools, fonts, and dependencies after resetting the rc files
+    deps:
+      - init:deps
+    cmds:
+      - task: tools:install
+      - |
+        {{.WARN}} "Please restart your terminal to apply the changes to your shell"

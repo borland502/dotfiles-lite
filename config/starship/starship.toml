@@ -1,0 +1,56 @@
+# Monokai Pro inspired Starship configuration
+
+format = """
+[░▒▓](#fc618d)\
+$directory\
+$git_branch\
+$git_status\
+$nodejs\
+$rust\
+$python\
+$cmd_duration\
+$line_break\
+$character"""
+
+# Core
+[character]
+success_symbol = "[❯](#a9dc76)"
+error_symbol = "[❯](#ff6188)"
+
+[directory]
+style = "fg:#ffd866"
+read_only = " "
+truncation_length = 4
+truncate_to_repo = true
+
+# Git
+[git_branch]
+symbol = " "
+style = "fg:#ab9df2"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "fg:#fc618d"
+format = '([\[$all_status$ahead_behind\]]($style) )'
+
+# Languages
+[nodejs]
+symbol = " "
+style = "fg:#a9dc76"
+format = "[$symbol($version )]($style)"
+
+[rust]
+symbol = " "
+style = "fg:#fc618d"
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "fg:#ffd866"
+format = "[$symbol($version )]($style)"
+
+# Utils
+[cmd_duration]
+style = "fg:#78dce8"
+format = "[$duration]($style) "
+min_time = 500

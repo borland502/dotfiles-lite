@@ -1,0 +1,161 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  INFO: "source lib/logging.sh; info"
+  ERROR: "source lib/logging.sh; error"
+  WARN: "source lib/logging.sh; warn"
+  DEBUG: "source lib/logging.sh; debug"
+
+env:
+  NVM_DIR: "{{.HOME}}/.nvm"
+  ZNAP_PREFIX: "source {{.HOME}}/Development/github/znap/znap.zsh; znap"
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - "task --list"
+
+  reset:plugins:
+    silent: true
+    internal: true
+    run: once
+    desc: "Reset all plugins"
+    cmds:
+      - "{{.INFO}} Resetting all plugins"
+      - echo > $HOME/.zshrc.d/05-plugins.zsh
+
+  install:
+    silent: true
+    desc: "Install all CLI tools"
+    cmds:
+      - "{{.INFO}} Installing all CLI tools"
+      - task --list | grep -E 'tools:[a-zA-Z0-9_-]+:' | cut -d ':' -f 2 | grep -v '^install$' | xargs -I {} task tools:{} || true
+
+  bat:
+    silent: true
+    desc: "Install bat"
+    status:
+      - test $(command -v bat)
+    cmds:
+      - "{{.INFO}} Installing bat"
+      - brew install bat
+
+  bun:
+    silent: true
+    desc: "Install bun"
+    status:
+      - test $(command -v bun)
+    cmds:
+      - "{{.INFO}} Installing bun"
+      - brew install oven-sh/bun/bun
+
+  eza:
+    silent: true
+    desc: "Install eza"
+    status:
+      - test $(command -v eza)
+    cmds:
+      - "{{.INFO}} Installing eza"
+      - brew install eza
+
+  fd:
+    silent: true
+    desc: "Install fd"
+    status:
+      - test $(command -v fd)
+    cmds:
+      - "{{.INFO}} Installing fd"
+      - brew install fd
+
+  fzf:
+    silent: true
+    desc: "Install fzf"
+    status:
+      - test $(command -v fzf)
+    cmds:
+      - "{{.INFO}} Installing fzf"
+      - brew install fzf
+
+  gcc:
+    silent: true
+    desc: "Install gcc"
+    status:
+      - test $(command -v gcc)
+    cmds:
+      - "{{.INFO}} Installing gcc"
+      - brew install gcc
+
+  ncdu:
+    silent: true
+    desc: "Install ncdu"
+    status:
+      - test $(command -v ncdu)
+    cmds:
+      - "{{.INFO}} Installing ncdu"
+      - brew install ncdu
+
+  nmap:
+    silent: true
+    desc: "Install nmap"
+    status:
+      - test $(command -v nmap)
+    cmds:
+      - "{{.INFO}} Installing nmap"
+      - brew install nmap
+
+  nvm:
+    silent: true
+    desc: "Install nvm"
+    requires:
+      vars:
+        - NVM_DIR
+    status:
+      - test -d {{.NVM_DIR}}
+    cmds:
+      - "{{.INFO}} Installing nvm"
+      - mkdir -p {{.NVM_DIR}}
+      - brew install nvm
+      - |
+        . $(brew --prefix)/opt/nvm/nvm.sh
+        nvm install --lts
+
+  ripgrep:
+    silent: true
+    desc: "Install ripgrep"
+    status:
+      - test $(command -v rg)
+    cmds:
+      - "{{.INFO}} Installing ripgrep"
+      - brew install ripgrep
+
+  sd:
+    silent: true
+    desc: "Install sd"
+    status:
+      - test $(command -v sd)
+    cmds:
+      - "{{.INFO}} Installing sd"
+      - brew install sd
+
+  starship:
+    silent: true
+    desc: "Install starship"
+    status:
+      - test $(command -v starship)
+    cmds:
+      - "{{.INFO}} Installing starship"
+      - brew install starship
+      - "{{.INFO}} Configuring starship"
+      - mkdir -p ~/.config/starship
+      - "gomplate -f config/starship/starship.toml -o ~/.config/starship/starship.toml"
+
+  vim:
+    silent: true
+    desc: "Install vim"
+    status:
+      - test $(command -v vim)
+    cmds:
+      - "{{.INFO}} Installing vim"
+      - brew install vim
