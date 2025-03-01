@@ -87,6 +87,15 @@ tasks:
       - "{{.INFO}} Installing gcc"
       - brew install gcc
 
+  gomplate:
+    silent: true
+    desc: "Install gomplate"
+    status:
+      - test $(command -v gomplate)
+    cmds:
+      - "{{.INFO}} Installing gomplate"
+      - brew install gomplate
+
   ncdu:
     silent: true
     desc: "Install ncdu"
@@ -130,6 +139,15 @@ tasks:
       - "{{.INFO}} Installing ripgrep"
       - brew install ripgrep
 
+  rsync:
+    silent: true
+    desc: "Install rsync"
+    status:
+      - test $(command -v rsync)
+    cmds:
+      - "{{.INFO}} Installing rsync"
+      - brew install rsync
+
   sd:
     silent: true
     desc: "Install sd"
@@ -148,8 +166,6 @@ tasks:
       - "{{.INFO}} Installing starship"
       - brew install starship
       - "{{.INFO}} Configuring starship"
-      - mkdir -p ~/.config/starship
-      - "gomplate -f config/starship/starship.toml -o ~/.config/starship/starship.toml"
 
   vim:
     silent: true
@@ -159,3 +175,21 @@ tasks:
     cmds:
       - "{{.INFO}} Installing vim"
       - brew install vim
+
+  zoxide:
+    silent: true
+    desc: "Install zoxide"
+    status:
+      - test $(command -v zoxide)
+    cmds:
+      - "{{.INFO}} Installing zoxide"
+      - brew install zoxide
+
+  zsh:
+    silent: true
+    desc: "Install zsh"
+    status:
+      - test $(command -v zsh)
+    cmds:
+      - "{{.INFO}} Installing zsh"
+      - brew install zsh

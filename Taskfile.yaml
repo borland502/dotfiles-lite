@@ -13,7 +13,10 @@ vars:
 
 includes:
   tools:
-    taskfile: taskfiles/cli-tools.yaml
+    taskfile: taskfiles/install-tools.yaml
+
+  setup:
+    taskfile: taskfiles/setup-tools.yaml
 
 tasks:
   init:deps:

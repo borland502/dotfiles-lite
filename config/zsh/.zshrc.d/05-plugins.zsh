@@ -6,4 +6,3 @@ znap source ptavares/zsh-sdkman
 znap source unixorn/fzf-zsh-plugin
 znap source zpm-zsh/clipboard
 znap source Atlas34/fzf-plugin
-znap source mfaerevaag/wd
