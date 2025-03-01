@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 # Logging utility using gum with Monokai Pro Filter Spectrum colors
 
 # shellcheck disable=SC1091

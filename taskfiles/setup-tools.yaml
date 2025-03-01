@@ -12,6 +12,7 @@ includes:
   install:
     internal: true
     taskfile: install-tools.yaml
+    dir: ../
 
 tasks:
   fzf:
