@@ -91,8 +91,6 @@ fi
 
 # Install the dependencies
 
-rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
-
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then
     echo "Installing Homebrew"
