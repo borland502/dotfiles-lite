@@ -4,7 +4,9 @@ PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
 
 # Install the dependencies
 
-rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
+rsync -u "config/zsh/.zshrc" "$HOME/"
+rsync -u "config/zsh/.zimrc" "$HOME/"
+
 
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then

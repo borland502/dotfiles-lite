@@ -1,5 +1,12 @@
-znap source zsh-users/zsh-autosuggestions
-znap source clarketm/zsh-completions
-znap source zdharma/fast-syntax-highlighting
-znap source targendaz2/taskfile
 
+#
+# Completion
+#
+
+# Boost evaluated tools like zoxide
+
+# Additional completion definitions for Zsh.
+zmodule clarketm/zsh-completions --fpath src
+# Enables and configures smart and extensive tab completion.
+# completion must be sourced after all modules that add completion definitions.
+zmodule completion
