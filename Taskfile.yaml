@@ -37,6 +37,11 @@ tasks:
     deps:
       - init:deps
     cmds:
-      - task: tools:install
+      # Tools that do not require additional setup
+      - task: tools:all
+      # Tools that require additional setup
+      - task: setup:zsh
+      - task: setup:starship
+      - task: setup:fzf
       - |
         {{.WARN}} "Please restart your terminal to apply the changes to your shell"

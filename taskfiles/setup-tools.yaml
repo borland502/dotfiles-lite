@@ -7,18 +7,10 @@ vars:
   WARN: "source lib/logging.sh; warn"
   DEBUG: "source lib/logging.sh; debug"
 
-# setup-tools extends install tools with tweaks for some of the packages and system files
-includes:
-  install:
-    internal: true
-    taskfile: install-tools.yaml
-
 tasks:
   fzf:
     silent: true
     desc: "Install fzf and setup keybindings"
-    deps:
-      - install:fzf
     cmds:
       - "{{.INFO}} Configuring fzf keybindings"
       - mkdir -p ~/.fzf/shell
@@ -28,9 +20,6 @@ tasks:
   starship:
     silent: true
     desc: "Install starship and customize it"
-    deps:
-      - install:gomplate
-      - install:starship
     cmds:
       - "{{.INFO}} Customizing starship"
       - mkdir -p ~/.config/starship
@@ -39,13 +28,6 @@ tasks:
   zsh:
     silent: true
     desc: "Install zsh and replace zdot files"
-    deps:
-      - install:fzf
-      - install:gomplate
-      - install:rsync
-      - install:starship
-      - install:zoxide
-      - install:zsh
     cmds:
       - "{{.INFO}} config zsh"
       - gomplate -f config/.env.tmpl -o .env
