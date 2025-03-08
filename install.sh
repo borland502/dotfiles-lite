@@ -5,91 +5,23 @@ DEBUG_COLOR="#78DCE8"  # Blue
 WARN_COLOR="#FFD866"   # Yellow
 ERROR_COLOR="#FF6188"  # Red# Logging utility using gum with Monokai Pro Filter Spectrum colors
 
-# shellcheck disable=SC1091
-source "lib/colors.sh"
+# cult of the xdg base directory
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=$HOME/.config}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:=$HOME/.local/run/user/$(id -u)}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
 
-function info() {
-    gum log --level=info --time=RFC850 --format=false \
-    --level.foreground="$INFO_COLOR" "$*"
-}
+# Create the directories
+for path in "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME" "$XDG_RUNTIME_DIR" "$XDG_STATE_HOME"; do
+  mkdir -p "$path"
+done
 
-function debug() {
-    gum log --level debug --time=RFC850 --format=true \
-    --level.foreground "$DEBUG_COLOR" "$*"
-}
-
-function warn() {
-    gum log --level warn --time=RFC850 --format=true \
-    --level.foreground "$WARN_COLOR" "$*"
-}
-
-function error() {
-    gum log --level error --time=RFC850 --format=true \
-    --level.foreground "$ERROR_COLOR" "$*"
-}
-
-function log() {
-    case "$1" in
-        info)
-            shift
-            info "$*"
-        ;;
-        debug)
-            shift
-            debug "$*"
-        ;;
-        warn)
-            shift
-            warn "$*"
-        ;;
-        error)
-            shift
-            error "$*"
-        ;;
-        *)
-            error "Unknown log level: $1"
-            return 1
-        ;;
-    esac
-}
-
-function help() {
-    info "This is an info message"
-    debug "This is a debug message"
-    warn "This is a warning message"
-    error "This is an error message"
-}
-export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/linuxbrew/sbin:$PATH"
-
-
-
-## Rootless - standard shell is used here rather than gum to avoid issues
-if [[ "$USER" == "root" ]]; then
-    echo "This script must be run as a non-root user. Please enter new user details:"
-    read -p "Username: " newuser
-    read -p "Password: " newpass
-    
-    useradd -m -s /bin/bash "$newuser"
-    echo "$newuser:$newpass" | chpasswd
-    usermod -aG sudo "$newuser"
-    echo "$newuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-    
-    script_dir="/home/$newuser/$(dirname "$(dirname "$0")")"
-    mkdir -p "$script_dir"
-    rsync -a "$(dirname "$(dirname "$0")")/" "$script_dir/"
-    chown -R "$newuser:$newuser" "/home/$newuser"
-    
-    # if home brew is already installed, change the owner of the directory
-    if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
-        chown -R "$newuser:$newuser" "/home/linuxbrew/.linuxbrew"
-    fi
-    
-    echo "Restarting script as $newuser"
-    cd "$script_dir"
-    exec su - "$newuser" -c "zsh $(basename $0)"
-fi
+PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
 
 # Install the dependencies
+rsync -u "config/zsh/.zshrc" "$HOME/"
+rsync -u "config/zsh/.zimrc" "$HOME/"
 
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then
