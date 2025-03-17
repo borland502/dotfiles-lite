@@ -25,6 +25,17 @@ tasks:
       - mkdir -p ~/.config/starship
       - "gomplate -f config/starship/starship.toml -o ~/.config/starship/starship.toml"
 
+  vim:
+    silent: true
+    desc: "Install vim, install vundle, & replace vimrc"
+    cmds:
+      - "{{.INFO}} Configuring vim"
+      - gomplate -f config/vim/.vimrc.tmpl -o ~/.config/vim/vimrc
+      - mkdir -p ~/.local/share/vim/bundle
+      - test -d ~/.local/share/vim/bundle/vim-maktaba || git clone https://github.com/google/vim-maktaba.git ~/.local/share/vim/bundle/vim-maktaba
+      - test -d ~/.local/share/vim/bundle/vim-glaive || git clone https://github.com/google/vim-glaive.git ~/.local/share/vim/bundle/vim-glaive
+      - test -d ~/.local/share/vim/bundle/Vundle.vim || git clone https://github.com/VundleVim/Vundle.vim.git ~/.local/share/vim/bundle/Vundle.vim
+
   zsh:
     silent: true
     desc: "Install zsh and replace zdot files"

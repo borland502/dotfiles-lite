@@ -43,5 +43,6 @@ tasks:
       - task: setup:zsh
       - task: setup:starship
       - task: setup:fzf
+      - task: setup:vim
       - |
         {{.WARN}} "Please restart your terminal to apply the changes to your shell"

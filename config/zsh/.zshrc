@@ -7,6 +7,8 @@ else
 fi
 export PATH="$BREW_PREFIX/bin:$PATH"
 
+
+
 # znap eval brew '$BREW_PREFIX/bin/brew shellenv'
 
 # source $HOME/.zshrc.d/01-sensible-default.zsh
@@ -20,4 +22,3 @@ export PATH="$BREW_PREFIX/bin:$PATH"
 # znap eval starship "starship init zsh" 2> /dev/null
 # znap eval atuin "atuin init zsh" 2> /dev/null
 # znap eval fzf "fzf --zsh" 2> /dev/null
-
