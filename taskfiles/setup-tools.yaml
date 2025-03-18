@@ -17,6 +17,16 @@ tasks:
       - "cp $(brew --prefix fzf)/shell/key-bindings.zsh ~/.fzf/shell/key-bindings.zsh"
       - test -f ~/.fzf/shell/key-bindings.zsh || echo config/fzf/key-bindings.zsh >> ~/.fzf/shell/key-bindings.zsh
 
+  kitty:
+    silent: false
+    desc: "Install kitty and replace kitty.conf"
+    cmds:
+      - "{{.INFO}} Configuring kitty"
+      - mkdir -p ~/.config/kitty
+      - gomplate -f config/kitty/kitty.conf.tmpl -o ~/.config/kitty/kitty.conf
+      - cp config/kitty/current-theme.conf ~/.config/kitty/current-theme.conf
+      - cp config/kitty/xterm-kitty.terminfo ~/.config/kitty/xterm-kitty.terminfo
+
   starship:
     silent: true
     desc: "Install starship and customize it"

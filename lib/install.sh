@@ -1,6 +1,21 @@
 # shellcheck disable=SC2148
-export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/linuxbrew/sbin:$PATH"
 
+mkdir -p "${XDG_CONFIG_HOME}/zsh"
+mkdir -p "${XDG_DATA_HOME}"
+
+backup_file="${HOME}/.zshenv.backup.$(date +%Y%m%d%H%M%S)"
+echo "Backing up ~/.zshenv to ${backup_file}"
+mv "${HOME}/.zshenv" "${backup_file}"
+
+cp ./config/zsh/.zshenv "${HOME}/.zshenv"
+
+backup_file="${HOME}/.envrc.backup.$(date +%Y%m%d%H%M%S)"
+echo "Backing up ~/.envrc to ${backup_file}"
+mv "${HOME}/.envrc" "${backup_file}"
+
+cp .envrc "${HOME}/.envrc"
+
+PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/homebrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/homebrew/sbin:$PATH"
 
 if ! [[ $(command -v rsync) ]]; then
     echo "Please install rsync with your package manager"
@@ -52,8 +67,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 fi
 
 test "$(command -v brew)" || exit 2
-
-rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
+cp "./config/zsh/.zshrc" "${XDG_CONFIG_HOME}/zsh/zshrc"
 
 ## Zsh
 if [[ "${SHELL}" != *"zsh" ]]; then
@@ -86,7 +100,8 @@ fi
 test "$(command -v gomplate)" || exit 2
 
 gomplate -f config/.env.tmpl -o .env
-rsync -u ./config/zsh/.zshrc.d/* ~/.zshrc.d/
+mkdir -p "${XDG_CONFIG_HOME}/.zshrc.d/"
+cp -r ./config/zsh/.zshrc.d/* "${XDG_CONFIG_HOME}/.zshrc.d/"
 
 if ! [[ $(command -v task) ]]; then
     echo "Installing Taskfiles.dev"
@@ -96,5 +111,8 @@ fi
 test "$(command -v task)" || exit 2
 
 task install:all
-task setup:starship
 task setup:fzf
+task setup:kitty
+task setup:starship
+task setup:vim
+task setup:zsh

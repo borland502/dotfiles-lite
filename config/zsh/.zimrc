@@ -1,7 +1,7 @@
 # vim:ft=zsh
-
-source $HOME/.zshrc.d/01-sensible-default.zsh
-source $HOME/.zshrc.d/02-aliases.zsh
-source $HOME/.zshrc.d/03-completions.zsh
-source $HOME/.zshrc.d/04-exports.zsh
-source $HOME/.zshrc.d/05-plugins.zsh
+ 
+source "$XDG_CONFIG_HOME/.zshrc.d/01-sensible-default.zsh"
+source "$XDG_CONFIG_HOME/.zshrc.d/02-aliases.zsh"
+source "$XDG_CONFIG_HOME/.zshrc.d/03-completions.zsh"
+source "$XDG_CONFIG_HOME/.zshrc.d/04-exports.zsh"
+source "$XDG_CONFIG_HOME/.zshrc.d/05-plugins.zsh"

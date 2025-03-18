@@ -51,6 +51,15 @@ tasks:
       - "{{.INFO}} Installing bun"
       - brew install oven-sh/bun/bun
 
+  direnv:
+    silent: true
+    desc: "Install direnv"
+    status:
+      - test $(command -v direnv)
+    cmds:
+      - "{{.INFO}} Installing direnv"
+      - brew install direnv
+
   eza:
     silent: true
     desc: "Install eza"
@@ -95,6 +104,15 @@ tasks:
     cmds:
       - "{{.INFO}} Installing gomplate"
       - brew install gomplate
+
+  kitty:
+    silent: true
+    desc: "Install kitty"
+    status:
+      - test $(command -v kitty)
+    cmds:
+      - "{{.INFO}} Installing kitty"
+      - brew install kitty
 
   ncdu:
     silent: true
