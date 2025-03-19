@@ -1,6 +1,5 @@
 zmodule mroth/evalcache
 zmodule lukechilds/zsh-nvm
-zmodule "z-shell/zsh-eza"
 zmodule zpm-zsh/clipboard
 zmodule targendaz2/taskfile
 

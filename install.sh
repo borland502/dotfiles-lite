@@ -5,35 +5,100 @@ DEBUG_COLOR="#78DCE8"  # Blue
 WARN_COLOR="#FFD866"   # Yellow
 ERROR_COLOR="#FF6188"  # Red# Logging utility using gum with Monokai Pro Filter Spectrum colors
 
-# cult of the xdg base directory
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=$HOME/.config}"
-export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:=$HOME/.local/run/user/$(id -u)}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
+# shellcheck disable=SC1091
+source "lib/colors.sh"
 
-# Create the directories
-for path in "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME" "$XDG_RUNTIME_DIR" "$XDG_STATE_HOME"; do
-  mkdir -p "$path"
-done
+function info() {
+  gum log --level=info --time=RFC850 --format=false \
+    --level.foreground="$INFO_COLOR" "$*"
+}
 
-# cult of the xdg base directory
-export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=$HOME/.config}"
-export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
-export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
-export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:=$HOME/.local/run/user/$(id -u)}"
-export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
+function debug() {
+  gum log --level debug --time=RFC850 --format=true \
+    --level.foreground "$DEBUG_COLOR" "$*"
+}
 
-# Create the directories
-for path in "$XDG_CONFIG_HOME" "$XDG_DATA_HOME" "$XDG_CACHE_HOME" "$XDG_RUNTIME_DIR" "$XDG_STATE_HOME"; do
-  mkdir -p "$path"
-done
+function warn() {
+  gum log --level warn --time=RFC850 --format=true \
+    --level.foreground "$WARN_COLOR" "$*"
+}
 
-PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:$PATH"
+function error() {
+  gum log --level error --time=RFC850 --format=true \
+    --level.foreground "$ERROR_COLOR" "$*"
+}
+
+function log() {
+  case "$1" in
+    info)
+      shift
+      info "$*"
+      ;;
+    debug)
+      shift
+      debug "$*"
+      ;;
+    warn)
+      shift
+      warn "$*"
+      ;;
+    error)
+      shift
+      error "$*"
+      ;;
+    *)
+      error "Unknown log level: $1"
+      return 1
+      ;;
+  esac
+}
+
+function help() {
+  info "This is an info message"
+  debug "This is a debug message"
+  warn "This is a warning message"
+  error "This is an error message"
+}
+# shellcheck disable=SC2148
+export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/linuxbrew/sbin:$PATH"
+
+
+if ! [[ $(command -v rsync) ]]; then
+    echo "Please install rsync with your package manager"
+fi
+
+if ! [[ $(command -v zsh) ]] && [[ "$USER" != "root" ]]; then
+    echo "Please install zsh with your package manager"
+    exit 1
+fi
+
+## Rootless - standard shell is used here rather than gum to avoid issues
+if [[ "$USER" == "root" ]]; then
+    echo "This script must be run as a non-root user. Please enter new user details:"
+    read -p "Username: " newuser
+    read -sp "Password: " newpass
+    
+    useradd -m -s /bin/bash "$newuser"
+    echo "$newuser:$newpass" | chpasswd
+    usermod -aG sudo "$newuser"
+    echo "$newuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    
+    script_dir="/home/$newuser/$(dirname "$(dirname "$0")")"
+    mkdir -p "$script_dir"
+    rsync -a "$(dirname "$(dirname "$0")")/" "$script_dir/"
+    chown -R "$newuser:$newuser" "/home/$newuser"
+    
+    # if home brew is already installed, change the owner of the directory
+    if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
+        chown -R "$newuser:$newuser" "/home/linuxbrew/.linuxbrew"
+    fi
+    
+    echo "Restarting script as $newuser"
+    cd "$script_dir" || exit
+    exec su - "$newuser" -c "zsh $(basename $0)"
+fi
 
 # Install the dependencies
-rsync -u "config/zsh/.zshrc" "$HOME/"
-rsync -u "config/zsh/.zimrc" "$HOME/"
 
 ## Homebrew
 if ! [[ $(command -v brew) ]]; then
@@ -91,9 +156,7 @@ fi
 
 test "$(command -v task)" || exit 2
 
-# shellcheck disable=SC1091
-source "./lib/logging.sh"
-
 task install:all
-task setup:starship
-task setup:fzf
+
+direnv allow
+source ~/.zshrc

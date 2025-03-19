@@ -10,7 +10,7 @@ vars:
 tasks:
   fzf:
     silent: true
-    desc: "Install fzf and setup keybindings"
+    desc: "Configure fzf and setup keybindings"
     cmds:
       - "{{.INFO}} Configuring fzf keybindings"
       - mkdir -p ~/.fzf/shell
@@ -19,7 +19,7 @@ tasks:
 
   starship:
     silent: true
-    desc: "Install starship and customize it"
+    desc: "Configure starship and customize it"
     cmds:
       - "{{.INFO}} Customizing starship"
       - mkdir -p ~/.config/starship
@@ -36,10 +36,19 @@ tasks:
       - test -d ~/.local/share/vim/bundle/vim-glaive || git clone https://github.com/google/vim-glaive.git ~/.local/share/vim/bundle/vim-glaive
       - test -d ~/.local/share/vim/bundle/Vundle.vim || git clone https://github.com/VundleVim/Vundle.vim.git ~/.local/share/vim/bundle/Vundle.vim
 
+  zim:
+    silent: true
+    desc: "Configure zim"
+    cmds:
+      - "{{.INFO}} Configuring zim"
+      - mkdir -p ~/.zim
+      - cp ./config/zsh/.zimrc ~/.zimrc
+
   zsh:
     silent: true
-    desc: "Install zsh and replace zdot files"
+    desc: "Configure zsh and replace zdot files"
     cmds:
       - "{{.INFO}} config zsh"
+      - mkdir -p ~/.zshrc.d
       - gomplate -f config/.env.tmpl -o .env
       - rsync -u ./config/zsh/.zshrc.d/* ~/.zshrc.d/

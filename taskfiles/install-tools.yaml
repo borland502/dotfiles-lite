@@ -10,6 +10,7 @@ vars:
 env:
   NVM_DIR: "{{.HOME}}/.nvm"
   ZNAP_PREFIX: "source {{.HOME}}/Development/github/znap/znap.zsh; znap"
+  ZIM_HOME: "{{.HOME}}/.zim"
 
 tasks:
   default:
@@ -25,13 +26,6 @@ tasks:
     cmds:
       - "{{.INFO}} Resetting all plugins"
       - echo > $HOME/.zshrc.d/05-plugins.zsh
-
-  all:
-    silent: true
-    desc: "Install all CLI tools"
-    cmds:
-      - "{{.INFO}} Installing all CLI tools"
-      - task --list | grep -E 'tools:[a-zA-Z0-9_-]+:' | cut -d ':' -f 2 | grep -v '^install$' | xargs -I {} task tools:{} || true
 
   bat:
     silent: true
@@ -175,6 +169,27 @@ tasks:
     cmds:
       - "{{.INFO}} Installing vim"
       - brew install vim
+
+  zinit:
+    silent: true
+    desc: "Install zinit"
+    status:
+      - test -d {{.HOME}}/.zinit
+    cmds:
+      - "{{.INFO}} Installing zinit"
+      - brew install zinit
+
+  zim:
+    silent: true
+    desc: "Install zim"
+    deps:
+      # zim will fail if eza plugin is active without eza
+      - task: eza
+    status:
+      - test $(command -v zimfw)
+    cmds:
+      - "{{.INFO}} Installing zim"
+      - brew install zimfw
 
   zoxide:
     silent: true

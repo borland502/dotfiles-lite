@@ -96,5 +96,6 @@ fi
 test "$(command -v task)" || exit 2
 
 task install:all
-task setup:starship
-task setup:fzf
+
+direnv allow
+source ~/.zshrc

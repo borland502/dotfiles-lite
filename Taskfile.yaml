@@ -13,7 +13,6 @@ vars:
 
 includes:
   tools:
-    internal: true
     taskfile: taskfiles/install-tools.yaml
 
   setup:
@@ -38,9 +37,13 @@ tasks:
       - init:deps
     cmds:
       # Tools that do not require additional setup
-      - task: tools:all
+      - task: tools:zim
+      - task: tools:zsh
+      - task: tools:fzf
+      - task: tools:vim
       # Tools that require additional setup
       - task: setup:zsh
+      - task: setup:zim
       - task: setup:starship
       - task: setup:fzf
       - task: setup:vim
