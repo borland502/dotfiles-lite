@@ -26,12 +26,14 @@ tasks:
       - "{{.INFO}} Resetting all plugins"
       - echo > $HOME/.zshrc.d/05-plugins.zsh
 
-  all:
+  bash:
     silent: true
-    desc: "Install all CLI tools"
+    desc: "Install bash"
+    status:
+      - test $(command -v bash)
     cmds:
-      - "{{.INFO}} Installing all CLI tools"
-      - task --list | grep -E 'tools:[a-zA-Z0-9_-]+:' | cut -d ':' -f 2 | grep -v '^install$' | xargs -I {} task tools:{} || true
+      - "{{.INFO}} Installing bash"
+      - brew install bash
 
   bat:
     silent: true
@@ -50,6 +52,15 @@ tasks:
     cmds:
       - "{{.INFO}} Installing bun"
       - brew install oven-sh/bun/bun
+
+  coreutils:
+    silent: true
+    desc: "Install coreutils"
+    status:
+      - test $(command -v gls)
+    cmds:
+      - "{{.INFO}} Installing coreutils"
+      - brew install coreutils
 
   direnv:
     silent: true

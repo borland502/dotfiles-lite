@@ -120,7 +120,6 @@ $character"""
   symbol = " "
 
 [git_status]
-  format = '([\[$all_status$ahead_behind\]]($style) )'
   style = "fg:#fc618d"
 
 [git_state]

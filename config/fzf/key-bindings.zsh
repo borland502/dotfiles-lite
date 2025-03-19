@@ -24,7 +24,7 @@ else
     __fzf_key_bindings_options="setopt"
     'local' '__fzf_opt'
     for __fzf_opt in "${(@)${(@f)$(set -o)}%% *}"; do
-      if [[ -o "$__fzf_opt" ]]; then
+      if [ -o "$__fzf_opt" ]; then
         __fzf_key_bindings_options+=" -o $__fzf_opt"
       else
         __fzf_key_bindings_options+=" +o $__fzf_opt"
@@ -36,7 +36,7 @@ fi
 'builtin' 'emulate' 'zsh' && 'builtin' 'setopt' 'no_aliases'
 
 {
-if [[ -o interactive ]]; then
+if [ -o interactive ]; then
 
 __fzf_defaults() {
   # $1: Prepend to FZF_DEFAULT_OPTS_FILE and FZF_DEFAULT_OPTS
@@ -71,7 +71,7 @@ fzf-file-widget() {
   zle reset-prompt
   return $ret
 }
-if [[ "${FZF_CTRL_T_COMMAND-x}" != "" ]]; then
+if [ "${FZF_CTRL_T_COMMAND-x}" != "" ]; then
   zle     -N            fzf-file-widget
   bindkey -M emacs '^T' fzf-file-widget
   bindkey -M vicmd '^T' fzf-file-widget
@@ -85,7 +85,7 @@ fzf-cd-widget() {
     FZF_DEFAULT_COMMAND=${FZF_ALT_C_COMMAND:-} \
     FZF_DEFAULT_OPTS=$(__fzf_defaults "--reverse --walker=dir,follow,hidden --scheme=path" "${FZF_ALT_C_OPTS-} +m") \
     FZF_DEFAULT_OPTS_FILE='' $(__fzfcmd) < /dev/tty)"
-  if [[ -z "$dir" ]]; then
+  if [ -z "$dir" ]; then
     zle redisplay
     return 0
   fi
@@ -97,7 +97,7 @@ fzf-cd-widget() {
   zle reset-prompt
   return $ret
 }
-if [[ "${FZF_ALT_C_COMMAND-x}" != "" ]]; then
+if [ "${FZF_ALT_C_COMMAND-x}" != "" ]; then
   zle     -N             fzf-cd-widget
   bindkey -M emacs '\ec' fzf-cd-widget
   bindkey -M vicmd '\ec' fzf-cd-widget
@@ -123,7 +123,7 @@ fzf-history-widget() {
   fi
   local ret=$?
   if [ -n "$selected" ]; then
-    if [[ $(awk '{print $1; exit}' <<< "$selected") =~ ^[1-9][0-9]* ]]; then
+    if [ $(awk '{print $1; exit}' <<< "$selected") =~ ^[1-9][0-9]* ]; then
       zle vi-fetch-history -n $MATCH
     else # selected is a custom query, not from history
       LBUFFER="$selected"

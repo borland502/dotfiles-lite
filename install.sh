@@ -1,8 +1,8 @@
-declare -rx XDG_CACHE_HOME="$HOME"/.cache
-declare -rx XDG_CONFIG_HOME="$HOME"/.config
-declare -rx XDG_DATA_HOME="$HOME"/.local/share
-declare -rx XDG_STATE_HOME="$HOME"/.local/state
-declare -rx XDG_RUNTIME_DIR="$TMPDIR"
+export XDG_CACHE_HOME="$HOME"/.cache
+export XDG_CONFIG_HOME="$HOME"/.config
+export XDG_DATA_HOME="$HOME"/.local/share
+export XDG_STATE_HOME="$HOME"/.local/state
+export XDG_RUNTIME_DIR="$TMPDIR"
 # Color definitions (Monokai Pro Filter Spectrum)
 INFO_COLOR="#FC9867"   # Orange
 DEBUG_COLOR="#78DCE8"  # Blue
@@ -63,6 +63,7 @@ function help() {
   warn "This is a warning message"
   error "This is an error message"
 }
+#!/usr/bin/env bash
 # shellcheck disable=SC2148
 
 mkdir -p "${XDG_CONFIG_HOME}/zsh"
@@ -72,7 +73,7 @@ backup_file="${HOME}/.zshenv.backup.$(date +%Y%m%d%H%M%S)"
 echo "Backing up ~/.zshenv to ${backup_file}"
 mv "${HOME}/.zshenv" "${backup_file}"
 
-cp ./config/zsh/.zshenv "${HOME}/.zshenv"
+rsync -avzPh ./config/* "${XDG_CONFIG_HOME}"
 
 backup_file="${HOME}/.envrc.backup.$(date +%Y%m%d%H%M%S)"
 echo "Backing up ~/.envrc to ${backup_file}"
@@ -142,7 +143,7 @@ if [[ "${SHELL}" != *"zsh" ]]; then
         echo "Zsh is not installed. Please install it at the system level or add this userspace shell in /etc/shells"
         brew install zsh
     fi
-    
+
     # placeholder for restart
     echo "export SHELL=$(which zsh)" > $HOME/.zshenv
     exec zsh -- "$0" "$@"
@@ -165,8 +166,7 @@ fi
 test "$(command -v gomplate)" || exit 2
 
 gomplate -f config/.env.tmpl -o .env
-mkdir -p "${XDG_CONFIG_HOME}/.zshrc.d/"
-cp -r ./config/zsh/.zshrc.d/* "${XDG_CONFIG_HOME}/.zshrc.d/"
+
 
 if ! [[ $(command -v task) ]]; then
     echo "Installing Taskfiles.dev"
@@ -175,9 +175,13 @@ fi
 
 test "$(command -v task)" || exit 2
 
+if ! [ $(command -v direnv) ]; then
+    echo "Installing direnv"
+    brew install direnv
+fi
+
+test "$(command -v direnv)" || exit 2
+
 task install:all
-task setup:fzf
-task setup:kitty
-task setup:starship
-task setup:vim
-task setup:zsh
+
+. ~/.config/zsh/zshrc
