@@ -98,4 +98,4 @@ test "$(command -v task)" || exit 2
 task install:all
 
 direnv allow
-source ~/.zshrc
+exec zsh

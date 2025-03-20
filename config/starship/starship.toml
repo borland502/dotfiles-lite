@@ -183,7 +183,7 @@ $character"""
   disabled = false
   format = ' [$time]($style) '
   style = "fg:#78dce8"
-  time_format = "%H:%M"
+  time_format = "%H:%M:%S"
 
 # Languages with symbols
 [nodejs]
