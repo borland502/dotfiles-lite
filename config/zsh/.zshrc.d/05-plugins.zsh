@@ -1,7 +1,6 @@
 zmodule mroth/evalcache
 zmodule lukechilds/zsh-nvm
 zmodule zpm-zsh/clipboard
-zmodule targendaz2/taskfile
 
 #
 # Modules that must be initialized last
