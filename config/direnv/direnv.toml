@@ -1,0 +1,6 @@
+[global]
+  hide_env_diff = false
+  load_dotenv = true
+  strict_env = true
+[whitelist]
+  exact = ["$HOME/.envrc"]

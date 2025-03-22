@@ -36,11 +36,27 @@ tasks:
     deps:
       - init:deps
     cmds:
-      # Tools that do not require additional setup
       - task: tools:zim
       - task: tools:zsh
       - task: tools:fzf
       - task: tools:vim
+      - task: tools:direnv
+      - task: tools:eza
+      - task: tools:bat
+      - task: tools:bun
+      - task: tools:starship
+      - task: tools:sd
+      - task: tools:gh
+      - task: tools:gcc
+      - task: tools:gomplate
+      - task: tools:fd
+      - task: tools:ripgrep
+      - task: tools:ncdu
+      - task: tools:zoxide
+      - task: tools:rsync
+      - task: tools:nvm
+      - task: tools:pyenv
+
       # Tools that require additional setup
       - task: setup:zsh
       - task: setup:zim

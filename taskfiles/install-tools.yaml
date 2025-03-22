@@ -45,6 +45,15 @@ tasks:
       - "{{.INFO}} Installing bun"
       - brew install oven-sh/bun/bun
 
+  direnv:
+    silent: true
+    desc: "Install direnv"
+    status:
+      - test $(command -v direnv)
+    cmds:
+      - "{{.INFO}} Installing direnv"
+      - brew install direnv
+
   eza:
     silent: true
     desc: "Install eza"
@@ -80,6 +89,15 @@ tasks:
     cmds:
       - "{{.INFO}} Installing gcc"
       - brew install gcc
+
+  gh:
+    silent: true
+    desc: "Install gh"
+    status:
+      - test $(command -v gh)
+    cmds:
+      - "{{.INFO}} Installing gh"
+      - brew install gh
 
   gomplate:
     silent: true
@@ -123,6 +141,16 @@ tasks:
       - |
         . $(brew --prefix)/opt/nvm/nvm.sh
         nvm install --lts
+
+  pyenv:
+    silent: true
+    desc: "Install pyenv"
+    status:
+      - test $(command -v pyenv)
+    cmds:
+      - "{{.INFO}} Installing pyenv"
+      - brew install pyenv
+      - brew install pyenv-virtualenv
 
   ripgrep:
     silent: true
