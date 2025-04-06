@@ -62,15 +62,19 @@ function help() {
 # shellcheck disable=SC2148
 export PATH="$HOME/.local/bin:/home/linuxbrew/.linuxbrew/bin:/opt/linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:/opt/linuxbrew/sbin:$PATH"
 
-
-if ! [[ $(command -v rsync) ]]; then
-    echo "Please install rsync with your package manager"
+if [[ $(command -v apt) ]]; then
+    sudo apt update
+    sudo apt install -y build-essential rsync zsh
+elif [[ $(command -v dnf) ]]; then
+    sudo dnf install -y rsync zsh
+elif [[ $(command -v pacman) ]]; then
+    sudo pacman -S --noconfirm rsync zsh
+elif [[ $(command -v brew) ]]; then
+    brew install rsync zsh
+else
+    echo "Please install rsync and zsh with your package manager"
 fi
 
-if ! [[ $(command -v zsh) ]] && [[ "$USER" != "root" ]]; then
-    echo "Please install zsh with your package manager"
-    exit 1
-fi
 
 ## Rootless - standard shell is used here rather than gum to avoid issues
 if [[ "$USER" == "root" ]]; then
@@ -114,6 +118,9 @@ fi
 
 test "$(command -v brew)" || exit 2
 
+# install user level up to date versions
+brew install rsync git zsh zim gh jq yq direnv vim
+
 rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
 
 ## Zsh
@@ -155,6 +162,13 @@ if ! [[ $(command -v task) ]]; then
 fi
 
 test "$(command -v task)" || exit 2
+
+## Direnv
+if ! [[ $(command -v direnv) ]]; then
+    echo "Installing Direnv"
+    brew install direnv
+fi
+rsync -u .envrc "$HOME/.envrc"
 
 task install:all
 
