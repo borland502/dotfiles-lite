@@ -1,6 +1,6 @@
 # Zim
-ZIM_CONFIG_FILE=~/.zimrc
-ZIM_HOME=${ZDOTDIR:-"${HOME}"}/.zim
+declare -rx ZIM_CONFIG_FILE=~/.zimrc
+declare -rx ZIM_HOME=${ZDOTDIR:-"${HOME}"}/.zim
 mkdir -p ${ZIM_HOME}
 
 # Download zimfw plugin manager if missing.
