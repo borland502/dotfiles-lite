@@ -1,1 +1,2 @@
+zmodule archive
 zmodule git

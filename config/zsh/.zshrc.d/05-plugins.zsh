@@ -16,7 +16,6 @@ zmodule joke/zim-github-cli
 zmodule muchobien/zim-bun
 zmodule muchobien/zim-zoxide
 
-
 # Fish-like syntax highlighting for Zsh.
 zmodule zsh-users/zsh-syntax-highlighting
 # Fish-like autosuggestions for Zsh.

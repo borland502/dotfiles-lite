@@ -14,28 +14,27 @@ else
     echo "Please install rsync and zsh with your package manager"
 fi
 
-
 ## Rootless - standard shell is used here rather than gum to avoid issues
 if [[ "$USER" == "root" ]]; then
     echo "This script must be run as a non-root user. Please enter new user details:"
     read -p "Username: " newuser
     read -sp "Password: " newpass
-    
+
     useradd -m -s /bin/bash "$newuser"
     echo "$newuser:$newpass" | chpasswd
     usermod -aG sudo "$newuser"
-    echo "$newuser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-    
+    echo "$newuser ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers
+
     script_dir="/home/$newuser/$(dirname "$(dirname "$0")")"
     mkdir -p "$script_dir"
     rsync -a "$(dirname "$(dirname "$0")")/" "$script_dir/"
     chown -R "$newuser:$newuser" "/home/$newuser"
-    
+
     # if home brew is already installed, change the owner of the directory
     if [[ -d "/home/linuxbrew/.linuxbrew" ]]; then
         chown -R "$newuser:$newuser" "/home/linuxbrew/.linuxbrew"
     fi
-    
+
     echo "Restarting script as $newuser"
     cd "$script_dir" || exit
     exec su - "$newuser" -c "zsh $(basename $0)"
@@ -51,7 +50,7 @@ fi
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
-    elif [[ "$OSTYPE" == "linux"* ]]; then
+elif [[ "$OSTYPE" == "linux"* ]]; then
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
 
@@ -59,7 +58,8 @@ test "$(command -v brew)" || exit 2
 
 # install user level up to date versions
 brew install rsync git zsh zim gh jq yq direnv vim
-
+# xdg-aware utilities will need to the files in ~/.config
+rsync -u "config/" "$HOME/.config/"
 rsync -u "config/zsh/.zshrc" "$HOME/.zshrc"
 
 ## Zsh
@@ -70,9 +70,9 @@ if [[ "${SHELL}" != *"zsh" ]]; then
         echo "Zsh is not installed. Please install it at the system level or add this userspace shell in /etc/shells"
         brew install zsh
     fi
-    
+
     # placeholder for restart
-    echo "export SHELL=$(which zsh)" > $HOME/.zshenv
+    echo "export SHELL=$(which zsh)" >$HOME/.zshenv
     exec zsh -- "$0" "$@"
 fi
 
@@ -92,8 +92,8 @@ fi
 
 test "$(command -v gomplate)" || exit 2
 
-gomplate -f config/.env.tmpl -o .env
 rsync -u ./config/zsh/.zshrc.d/* ~/.zshrc.d/
+gomplate -f config/.env.tmpl -o .env
 
 if ! [[ $(command -v task) ]]; then
     echo "Installing Taskfiles.dev"

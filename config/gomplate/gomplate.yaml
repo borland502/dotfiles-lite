@@ -1,0 +1,3 @@
+plugins:
+  exists:
+    cmd: "config/gomplate/plugins/exist.sh"
