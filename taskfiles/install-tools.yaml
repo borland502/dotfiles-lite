@@ -54,6 +54,15 @@ tasks:
       - "{{.INFO}} Installing direnv"
       - brew install direnv
 
+  diff-so-fancy:
+    silent: true
+    desc: "Install diff-so-fancy"
+    status:
+      - test $(command -v diff-so-fancy)
+    cmds:
+      - "{{.INFO}} Installing diff-so-fancy"
+      - brew install diff-so-fancy
+
   eza:
     silent: true
     desc: "Install eza"
@@ -141,6 +150,15 @@ tasks:
       - |
         . $(brew --prefix)/opt/nvm/nvm.sh
         nvm install --lts
+
+  prettyping:
+    silent: true
+    desc: "Install prettyping"
+    status:
+      - test $(command -v prettyping)
+    cmds:
+      - "{{.INFO}} Installing prettyping"
+      - brew install prettyping
 
   pyenv:
     silent: true
