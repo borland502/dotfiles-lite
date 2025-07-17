@@ -40,7 +40,6 @@ tasks:
       - task: tools:zsh
       - task: tools:fzf
       - task: tools:vim
-      - task: tools:diff-so-fancy
       - task: tools:direnv
       - task: tools:eza
       - task: tools:bat
@@ -51,12 +50,12 @@ tasks:
       - task: tools:gcc
       - task: tools:gomplate
       - task: tools:fd
+      - task: tools:rclone
       - task: tools:ripgrep
       - task: tools:ncdu
       - task: tools:zoxide
       - task: tools:rsync
       - task: tools:nvm
-      - task: tools:prettyping
       - task: tools:pyenv
 
       # Tools that require additional setup
